@@ -26,8 +26,8 @@ const int ONBOARD_LED_PIN = 12; // the pin number of the on-baord LED; just to t
 
 // These are the angles that the servo has to go to in order to release the kibble
 const int FEED_POS_CLOSED = 0;
-const int FEED_POS_OPEN1 = 55;
-const int FEED_POS_OPEN2 = 110;
+const int FEED_POS_OPEN1 = 53;
+const int FEED_POS_OPEN2 = 105;
 const int FEED_POS_OPEN3 = 165;
 
 Servo myservo;  // create servo object to control a servo
@@ -36,23 +36,22 @@ Servo myservo;  // create servo object to control a servo
 
 void setup() {
   Serial.begin(9600);
-  // servo setup
- // myservo.attach(9,70, 2700);  // attaches the servo on pin 9 to the servo object 
-  myservo.attach(SERVO_PIN, 444, 2500);  // attaches the servo on pin 9 to the servo object
-//  myservo.attach(SERVO_PIN, 544, 2400);  // attaches the servo on pin 9 to the servo object
+  // servo setup - use custom settings to get a little over 180 degrees
+  myservo.attach(SERVO_PIN, 425, 2500);  // attaches the servo on pin 9 to the servo object
   delay(100);
-  servo_move(20, FEED_POS_CLOSED, 1, 5);
+  // servo_move(1, FEED_POS_CLOSED, 1, 15);
+  myservo.write(FEED_POS_CLOSED);
 
   // initialize the LED pins as output:
-//  pinMode(GREEN_LED_PIN, OUTPUT);
-//  pinMode(RED_LED_PIN, OUTPUT);
-//  pinMode(ONBOARD_LED_PIN, OUTPUT);
+  pinMode(GREEN_LED_PIN, OUTPUT);
+  pinMode(RED_LED_PIN, OUTPUT);
+  pinMode(ONBOARD_LED_PIN, OUTPUT);
   
   // initialize the pushbutton pin as an input:
-//  pinMode(BUTTON_PIN, INPUT);
+  //  pinMode(BUTTON_PIN, INPUT);
 
-
-  // digitalWrite(RED_LED_PIN, HIGH);
+  // disable the onboard LED
+  digitalWrite(ONBOARD_LED_PIN, LOW);
 
 
   delay(5000);
@@ -71,7 +70,7 @@ void setup() {
 
 int redVal = 0;
 int ledPhase = 1;
-void loopLed() {
+void loop() {
 //  Serial.println(redVal);
 //  analogWrite(RED_LED_PIN, redVal);
   redVal += ledPhase;
@@ -83,7 +82,7 @@ void loopLed() {
 
 
 
-void loop() {
+void loopX() {
   delay(1000);
 }
 
@@ -100,6 +99,8 @@ void feed_cup2() {
 
 void feed_cup3() {
   servo_move(FEED_POS_OPEN2, FEED_POS_OPEN3, 1, 15);
+  delay(500);
+  servo_move(FEED_POS_OPEN3, FEED_POS_OPEN3 + 3, 1, 15);
 }
 
 void feed_close() {
