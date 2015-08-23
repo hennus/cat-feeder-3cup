@@ -10,6 +10,17 @@
  * Green LED on pin 10 with resistor 300 ohm
  * Servo on pin 9
  * 
+ * Usage to give 6 meals a day:
+ * - manual feed at 8:00, reset feeder, fill 3 cups.
+ * - feed cup 1 at 11:00
+ * - feed cup 2 at 14:00
+ * - feed cup 3 at 17:00
+ * - manual feed at 19:30
+ * - manual feed at 22:30
+ * 
+ * The green LED blinks the number of feeds that have been given by the machine.
+ * The red LED glows when the third feed is done.
+ * 
  * TODO:
  * pushbutton attached to pin 2 from +5V
  * 10K resistor attached to pin 2 from ground
@@ -29,11 +40,13 @@ const int FEED_POS_OPEN1 = 53;
 const int FEED_POS_OPEN2 = 105;
 const int FEED_POS_OPEN3 = 165;
 
-const long DELAY_2_AND_A_HALF_HOURS_IN_MILLIS = (5L * 60L * 60L * 1000L) / 2L;
-// const long DELAY_2_AND_A_HALF_HOURS_IN_MILLIS = 30000L; // for testing
-const long DELAY_CUP1 = 1L * DELAY_2_AND_A_HALF_HOURS_IN_MILLIS;
-const long DELAY_CUP2 = 2L * DELAY_2_AND_A_HALF_HOURS_IN_MILLIS;
-const long DELAY_CUP3 = 3L * DELAY_2_AND_A_HALF_HOURS_IN_MILLIS;
+//const long DELAY_2_AND_A_HALF_HOURS_IN_MILLIS = (5L * 60L * 60L * 1000L) / 2L;
+const long DELAY_3_HOURS_IN_MILLIS = (3L * 60L * 60L * 1000L); // three hours
+// const long DELAY_3_HOURS_IN_MILLIS = 10000L; // for testing
+
+const long DELAY_CUP1 = 1L * DELAY_3_HOURS_IN_MILLIS;
+const long DELAY_CUP2 = 2L * DELAY_3_HOURS_IN_MILLIS;
+const long DELAY_CUP3 = 3L * DELAY_3_HOURS_IN_MILLIS;
 
 enum feeder_state {
   STATE_RESET,
@@ -49,13 +62,13 @@ Servo myservo;  // create servo object to control a servo
 
 void setup() {
   Serial.begin(9600);
-  Serial.print("  DELAY_2_AND_A_HALF_HOURS_IN_MILLIS=");
-  Serial.println(DELAY_2_AND_A_HALF_HOURS_IN_MILLIS);
+  Serial.print("  DELAY_3_HOURS_IN_MILLIS=");
+  Serial.println(DELAY_3_HOURS_IN_MILLIS);
 
   // position servo at reset to closed position.
   attach_servo();
-  // servo_move(1, FEED_POS_CLOSED, 1, 15);
   myservo.write(FEED_POS_CLOSED);
+  delay(200);
   detach_servo();
 
   // initialize the LED pins as output:
