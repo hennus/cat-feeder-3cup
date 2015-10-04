@@ -12,11 +12,10 @@
  * 
  * Usage to give 6 meals a day:
  * - manual feed at 8:00, reset feeder, fill 3 cups.
- * - feed cup 1 at 11:00
- * - feed cup 2 at 14:00
- * - feed cup 3 at 17:00
- * - manual feed at 19:30
- * - manual feed at 22:30
+ * - feed cup 1 at 11:45
+ * - feed cup 2 at 15:30
+ * - feed cup 3 at 19:15
+ * - manual feed at 23:00
  * 
  * The green LED blinks the number of feeds that have been given by the machine.
  * The red LED glows when the third feed is done.
@@ -42,11 +41,15 @@ const int FEED_POS_OPEN3 = 165;
 
 //const long DELAY_2_AND_A_HALF_HOURS_IN_MILLIS = (5L * 60L * 60L * 1000L) / 2L;
 const long DELAY_3_HOURS_IN_MILLIS = (3L * 60L * 60L * 1000L); // three hours
-// const long DELAY_3_HOURS_IN_MILLIS = 10000L; // for testing
+const long DELAY_10_SECONDS_IN_MILLIS = 1000L; // for testing
+const long DELAY_3_HOURS_AND_45_MINS_IN_MILLIS = (3L * 60L * 60L * 1000L) + (45L * 60L * 1000L); // 3h+45min
 
-const long DELAY_CUP1 = 1L * DELAY_3_HOURS_IN_MILLIS;
-const long DELAY_CUP2 = 2L * DELAY_3_HOURS_IN_MILLIS;
-const long DELAY_CUP3 = 3L * DELAY_3_HOURS_IN_MILLIS;
+// const long DELAY_INTERVAL = DELAY_10_SECONDS_IN_MILLIS;
+const long DELAY_INTERVAL = DELAY_3_HOURS_AND_45_MINS_IN_MILLIS;
+
+const long DELAY_CUP1 = 1L * DELAY_INTERVAL;
+const long DELAY_CUP2 = 2L * DELAY_INTERVAL;
+const long DELAY_CUP3 = 3L * DELAY_INTERVAL;
 
 enum feeder_state {
   STATE_RESET,
@@ -86,10 +89,10 @@ void setup() {
   digitalWrite(RED_LED_PIN, LOW);
 }
 
-int redVal = 0;
-int ledPhase = 25;
-
-
+// Current PWM value for red LED initial value must be between upper and lower limits
+int redVal = 10;
+// step direction for redLed value adjustments
+int ledPhase = 1;
 
 void loop() {
   switch (state) {
@@ -137,8 +140,12 @@ void loop() {
       // maintain RED light
       analogWrite(RED_LED_PIN, redVal);
       redVal += ledPhase;
-      if (redVal >= 255 || redVal <= 0) {
+      Serial.print("redVal=");
+      Serial.println(redVal);
+      if (redVal >= 30 || redVal <= 1) {
         ledPhase = -1 * ledPhase;
+        Serial.print("flip phase to ");
+        Serial.println(ledPhase);
       }
       delay(100);
       break;
