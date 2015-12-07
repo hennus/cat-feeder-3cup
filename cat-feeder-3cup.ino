@@ -41,15 +41,20 @@ const int FEED_POS_OPEN3 = 165;
 
 //const long DELAY_2_AND_A_HALF_HOURS_IN_MILLIS = (5L * 60L * 60L * 1000L) / 2L;
 const long DELAY_3_HOURS_IN_MILLIS = (3L * 60L * 60L * 1000L); // three hours
-const long DELAY_10_SECONDS_IN_MILLIS = 1000L; // for testing
+const long DELAY_10_SECONDS_IN_MILLIS = 10 * 1000L; // for testing
 const long DELAY_3_HOURS_AND_45_MINS_IN_MILLIS = (3L * 60L * 60L * 1000L) + (45L * 60L * 1000L); // 3h+45min
 
 // const long DELAY_INTERVAL = DELAY_10_SECONDS_IN_MILLIS;
 const long DELAY_INTERVAL = DELAY_3_HOURS_AND_45_MINS_IN_MILLIS;
+// const long DELAY_INTERVAL = DELAY_3_HOURS_IN_MILLIS;
 
-const long DELAY_CUP1 = 1L * DELAY_INTERVAL;
-const long DELAY_CUP2 = 2L * DELAY_INTERVAL;
-const long DELAY_CUP3 = 3L * DELAY_INTERVAL;
+const long HALF_HOUR_IN_MILLIS = 30L * 60L * 1000L;
+
+const long DELAY_CUP1 = DELAY_INTERVAL + (1L * DELAY_INTERVAL) - HALF_HOUR_IN_MILLIS;
+const long DELAY_CUP2 = DELAY_INTERVAL + (2L * DELAY_INTERVAL) - HALF_HOUR_IN_MILLIS;
+const long DELAY_CUP3 = DELAY_INTERVAL + (3L * DELAY_INTERVAL) - HALF_HOUR_IN_MILLIS;
+
+const long START_TIME_IN_HR = 8;
 
 enum feeder_state {
   STATE_RESET,
@@ -63,10 +68,25 @@ enum feeder_state state = STATE_RESET;
 
 Servo myservo;  // create servo object to control a servo
 
+void print_delay(const char* msg, long d) {
+  Serial.print("  ");
+  Serial.print(msg);
+  Serial.print(" ");
+  Serial.print(d);
+  Serial.print("ms = ");
+  float hr = d / 1000.0 / 60.0 / 60.0;
+  Serial.print(hr);
+  Serial.print("hr @");
+  Serial.print(hr + START_TIME_IN_HR);
+  Serial.println("hr");
+}
+
 void setup() {
   Serial.begin(9600);
-  Serial.print("  DELAY_3_HOURS_IN_MILLIS=");
-  Serial.println(DELAY_3_HOURS_IN_MILLIS);
+  print_delay("DELAY_INTERVAL", DELAY_INTERVAL);
+  print_delay("DELAY_CUP1", DELAY_CUP1);
+  print_delay("DELAY_CUP2", DELAY_CUP2);
+  print_delay("DELAY_CUP3", DELAY_CUP3);
 
   // position servo at reset to closed position.
   attach_servo();
