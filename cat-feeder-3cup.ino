@@ -10,12 +10,6 @@
  * Green LED on pin 10 with resistor 300 ohm
  * Servo on pin 9
  * 
- * Usage to give 6 meals a day:
- * - manual feed at 8:00, reset feeder, fill 3 cups.
- * - feed cup 1 at 11:45
- * - feed cup 2 at 15:30
- * - feed cup 3 at 19:15
- * - manual feed at 23:00
  * 
  * The green LED blinks the number of feeds that have been given by the machine.
  * The red LED glows when the third feed is done.
@@ -41,18 +35,36 @@ const int FEED_POS_OPEN3 = 165;
 
 //const long DELAY_2_AND_A_HALF_HOURS_IN_MILLIS = (5L * 60L * 60L * 1000L) / 2L;
 const long DELAY_3_HOURS_IN_MILLIS = (3L * 60L * 60L * 1000L); // three hours
+const long DELAY_HALF_HOUR_IN_MILLIS = (30L * 60L * 1000L); // half hour
 const long DELAY_10_SECONDS_IN_MILLIS = 10 * 1000L; // for testing
 const long DELAY_3_HOURS_AND_45_MINS_IN_MILLIS = (3L * 60L * 60L * 1000L) + (45L * 60L * 1000L); // 3h+45min
 
-// const long DELAY_INTERVAL = DELAY_10_SECONDS_IN_MILLIS;
-const long DELAY_INTERVAL = DELAY_3_HOURS_AND_45_MINS_IN_MILLIS;
-// const long DELAY_INTERVAL = DELAY_3_HOURS_IN_MILLIS;
 
-const long HALF_HOUR_IN_MILLIS = 30L * 60L * 1000L;
+#if 1
+/* 
+ * Usage to give 5 meals a day:
+ * - manual feed at 8:00, reset feeder, fill 3 cups.
+ * - feed cup 1 at 11:30
+ * - feed cup 2 at 15:30
+ * - manual feed at 19:00
+ * - feed cup 3 at 22:30  (Prefer latest feed to be automatic to prevent 'behavioural issues'.)
+ */
+const long DELAY_CUP1 = DELAY_3_HOURS_IN_MILLIS + DELAY_HALF_HOUR_IN_MILLIS;
+const long DELAY_CUP2 = DELAY_CUP1 + DELAY_3_HOURS_IN_MILLIS + (2 * DELAY_HALF_HOUR_IN_MILLIS);
+const long DELAY_CUP3 = DELAY_CUP2 + 2*DELAY_3_HOURS_IN_MILLIS + (2 * DELAY_HALF_HOUR_IN_MILLIS);
+#else
+/* 
+ * Usage to give 4 meals a day:
+ * - manual feed double dosis in food-ball at 8:00, reset feeder, fill 3 cups.
+ * - feed cup 1 at 15:00
+ * - feed cup 2 at 18:45
+ * - feed cup 3 at 22:30
+ */
+const long DELAY_CUP1 = DELAY_3_HOURS_AND_45_MINS_IN_MILLIS + (1L * DELAY_3_HOURS_AND_45_MINS_IN_MILLIS) - DELAY_HALF_HOUR_IN_MILLIS;
+const long DELAY_CUP2 = DELAY_3_HOURS_AND_45_MINS_IN_MILLIS + (2L * DELAY_3_HOURS_AND_45_MINS_IN_MILLIS) - DELAY_HALF_HOUR_IN_MILLIS;
+const long DELAY_CUP3 = DELAY_3_HOURS_AND_45_MINS_IN_MILLIS + (3L * DELAY_3_HOURS_AND_45_MINS_IN_MILLIS) - DELAY_HALF_HOUR_IN_MILLIS;
+#endif
 
-const long DELAY_CUP1 = DELAY_INTERVAL + (1L * DELAY_INTERVAL) - HALF_HOUR_IN_MILLIS;
-const long DELAY_CUP2 = DELAY_INTERVAL + (2L * DELAY_INTERVAL) - HALF_HOUR_IN_MILLIS;
-const long DELAY_CUP3 = DELAY_INTERVAL + (3L * DELAY_INTERVAL) - HALF_HOUR_IN_MILLIS;
 
 const long START_TIME_IN_HR = 8;
 
@@ -83,7 +95,6 @@ void print_delay(const char* msg, long d) {
 
 void setup() {
   Serial.begin(9600);
-  print_delay("DELAY_INTERVAL", DELAY_INTERVAL);
   print_delay("DELAY_CUP1", DELAY_CUP1);
   print_delay("DELAY_CUP2", DELAY_CUP2);
   print_delay("DELAY_CUP3", DELAY_CUP3);
