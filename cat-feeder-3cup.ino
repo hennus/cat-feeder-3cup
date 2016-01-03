@@ -36,6 +36,7 @@ const int FEED_POS_OPEN3 = 165;
 //const long DELAY_2_AND_A_HALF_HOURS_IN_MILLIS = (5L * 60L * 60L * 1000L) / 2L;
 const long DELAY_3_HOURS_IN_MILLIS = (3L * 60L * 60L * 1000L); // three hours
 const long DELAY_HALF_HOUR_IN_MILLIS = (30L * 60L * 1000L); // half hour
+const long DELAY_HOUR_IN_MILLIS = (60L * 60L * 1000L); // hour
 const long DELAY_10_SECONDS_IN_MILLIS = 10 * 1000L; // for testing
 const long DELAY_3_HOURS_AND_45_MINS_IN_MILLIS = (3L * 60L * 60L * 1000L) + (45L * 60L * 1000L); // 3h+45min
 
@@ -49,9 +50,39 @@ const long DELAY_3_HOURS_AND_45_MINS_IN_MILLIS = (3L * 60L * 60L * 1000L) + (45L
  * - manual feed at 19:00
  * - feed cup 3 at 22:30  (Prefer latest feed to be automatic to prevent 'behavioural issues'.)
  */
+const long START_TIME_IN_HR = 8;
+// const double START_TIME_IN_HR = 14.75;
+// const long DELAY_CUP1 = DELAY_HOUR_IN_MILLIS * 3 /4;
 const long DELAY_CUP1 = DELAY_3_HOURS_IN_MILLIS + DELAY_HALF_HOUR_IN_MILLIS;
-const long DELAY_CUP2 = DELAY_CUP1 + DELAY_3_HOURS_IN_MILLIS + (2 * DELAY_HALF_HOUR_IN_MILLIS);
+const long DELAY_CUP2 = DELAY_CUP1 + DELAY_3_HOURS_IN_MILLIS + (DELAY_HOUR_IN_MILLIS);
 const long DELAY_CUP3 = DELAY_CUP2 + 2*DELAY_3_HOURS_IN_MILLIS + (2 * DELAY_HALF_HOUR_IN_MILLIS);
+#elif 0
+/* 
+ * Usage to give 5 meals a day:
+ * - manual feed at 8:00, 
+ * - manual feed at 11:30, reset feeder, fill 3 cups.
+ * - feed cup 1 at 15:30
+ * - feed cup 2 at 19:00
+ * - feed cup 3 at 22:30
+ */
+const double START_TIME_IN_HR = 11.5;
+const long DELAY_CUP1 = DELAY_3_HOURS_IN_MILLIS + (2 * DELAY_HALF_HOUR_IN_MILLIS);
+const long DELAY_CUP2 = DELAY_CUP1 + DELAY_3_HOURS_IN_MILLIS + DELAY_HALF_HOUR_IN_MILLIS;
+const long DELAY_CUP3 = DELAY_CUP2 + DELAY_3_HOURS_IN_MILLIS + DELAY_HALF_HOUR_IN_MILLIS;
+#elif 0
+/* 
+ * Usage to dispense 2 meals in the evening
+ * - manual feed at 8:00, reset feeder, fill 3 cups.
+ * - manual feed at 11:30, 
+ * - manual feed at 15:30,
+ * - feed cup 1 at 19:00
+ * - feed cup 2 at 22:30
+ * - feed cup 3 at  8:00
+ */
+const double START_TIME_IN_HR = 8;
+const long DELAY_CUP1 = 11 * DELAY_HOUR_IN_MILLIS;
+const long DELAY_CUP2 = DELAY_CUP1 + DELAY_3_HOURS_IN_MILLIS + DELAY_HALF_HOUR_IN_MILLIS;
+const long DELAY_CUP3 = 24 * DELAY_HOUR_IN_MILLIS;
 #else
 /* 
  * Usage to give 4 meals a day:
@@ -60,13 +91,14 @@ const long DELAY_CUP3 = DELAY_CUP2 + 2*DELAY_3_HOURS_IN_MILLIS + (2 * DELAY_HALF
  * - feed cup 2 at 18:45
  * - feed cup 3 at 22:30
  */
+const long START_TIME_IN_HR = 8;
 const long DELAY_CUP1 = DELAY_3_HOURS_AND_45_MINS_IN_MILLIS + (1L * DELAY_3_HOURS_AND_45_MINS_IN_MILLIS) - DELAY_HALF_HOUR_IN_MILLIS;
 const long DELAY_CUP2 = DELAY_3_HOURS_AND_45_MINS_IN_MILLIS + (2L * DELAY_3_HOURS_AND_45_MINS_IN_MILLIS) - DELAY_HALF_HOUR_IN_MILLIS;
 const long DELAY_CUP3 = DELAY_3_HOURS_AND_45_MINS_IN_MILLIS + (3L * DELAY_3_HOURS_AND_45_MINS_IN_MILLIS) - DELAY_HALF_HOUR_IN_MILLIS;
 #endif
 
 
-const long START_TIME_IN_HR = 8;
+
 
 enum feeder_state {
   STATE_RESET,
@@ -95,6 +127,9 @@ void print_delay(const char* msg, long d) {
 
 void setup() {
   Serial.begin(9600);
+  Serial.print("Start at ");
+  Serial.print(START_TIME_IN_HR);
+  Serial.println("hr");
   print_delay("DELAY_CUP1", DELAY_CUP1);
   print_delay("DELAY_CUP2", DELAY_CUP2);
   print_delay("DELAY_CUP3", DELAY_CUP3);
