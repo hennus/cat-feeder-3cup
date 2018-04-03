@@ -2,7 +2,7 @@
  * Uses a micro-servo with 3 tubes to drop kibble from a tube through a hole.
  * 
  * Wakes up every second to check the time and goes back to sleep if nothing
- * to be done. This should save battery power.
+ * to be done. This should save battery power. 
  * 
  * Copyright (c) by Hennus Bergman
  * 
@@ -41,7 +41,44 @@ const long DELAY_10_SECONDS_IN_MILLIS = 10 * 1000L; // for testing
 const long DELAY_3_HOURS_AND_45_MINS_IN_MILLIS = (3L * 60L * 60L * 1000L) + (45L * 60L * 1000L); // 3h+45min
 
 
-#if 1
+#if 0
+/* 
+ * Usage to give 4 meals a day:
+ * - manual feed at 10:00, reset feeder, fill 3 cups.
+ * - feed cup 1 at 15:00
+ * - feed cup 2 at 20:00
+ * - feed cup 3 at 01:30
+ */
+const long START_TIME_IN_HR = 10;
+const long DELAY_CUP1 = 5 * DELAY_HOUR_IN_MILLIS;
+const long DELAY_CUP2 = DELAY_CUP1 + 5 * DELAY_HOUR_IN_MILLIS;
+const long DELAY_CUP3 = DELAY_CUP2 + 5.5 * DELAY_HOUR_IN_MILLIS;
+#elif 1
+/* 
+ * Usage to give 4 meals a day:
+ * - manual feed at 8:00, reset feeder, fill 3 cups.
+ * - feed cup 1 at 13:00
+ * - feed cup 2 at 18:00
+ * - feed cup 3 at 22:45
+ */
+const long START_TIME_IN_HR = 8;
+const long DELAY_CUP1 = 5 * DELAY_HOUR_IN_MILLIS;
+const long DELAY_CUP2 = DELAY_CUP1 + 5 * DELAY_HOUR_IN_MILLIS;
+const long DELAY_CUP3 = DELAY_CUP2 + 4.75 * DELAY_HOUR_IN_MILLIS;
+#elif 0
+/* 
+ * Usage to give 5 meals a day:
+ * - manual feed at 8:00, reset feeder, fill 3 cups.
+ * - feed cup 1 at 11:30
+ * - feed cup 2 at 15:30
+ * - feed cup 3 at 18:30
+ * - manual feed at 22:30
+ */
+const long START_TIME_IN_HR = 8;
+const long DELAY_CUP1 = 3.5 * DELAY_HOUR_IN_MILLIS;
+const long DELAY_CUP2 = DELAY_CUP1 + 4 * DELAY_HOUR_IN_MILLIS;
+const long DELAY_CUP3 = DELAY_CUP2 + 3 * DELAY_HOUR_IN_MILLIS;;
+#elif 0
 /* 
  * Usage to give 5 meals a day:
  * - manual feed at 8:00, reset feeder, fill 3 cups.
@@ -79,10 +116,10 @@ const long DELAY_CUP3 = DELAY_CUP2 + DELAY_3_HOURS_IN_MILLIS + DELAY_HALF_HOUR_I
  * - feed cup 2 at 22:30
  * - feed cup 3 at  8:00
  */
-const double START_TIME_IN_HR = 8;
-const long DELAY_CUP1 = 11 * DELAY_HOUR_IN_MILLIS;
-const long DELAY_CUP2 = DELAY_CUP1 + DELAY_3_HOURS_IN_MILLIS + DELAY_HALF_HOUR_IN_MILLIS;
-const long DELAY_CUP3 = 24 * DELAY_HOUR_IN_MILLIS;
+const double START_TIME_IN_HR = 17.5;
+const long DELAY_CUP1 = 1.0 * DELAY_HOUR_IN_MILLIS;
+const long DELAY_CUP2 = DELAY_CUP1 + 4 * DELAY_HOUR_IN_MILLIS;
+const long DELAY_CUP3 = DELAY_CUP2 + 9.5 * DELAY_HOUR_IN_MILLIS;
 #else
 /* 
  * Usage to give 4 meals a day:
